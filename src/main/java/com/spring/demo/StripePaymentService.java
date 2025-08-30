@@ -1,8 +1,12 @@
 package com.spring.demo;
 
-public class StripePaymentService {
-    public void processPayment() {
+import org.springframework.stereotype.Service;
+
+@Service
+public class StripePaymentService implements PaymentService {
+    @Override
+    public void processPayment(double amount) {
         var paymentService = "Stripe";
-        System.out.println(paymentService);
+        System.out.println("Processing payment of $" + amount + " through " + paymentService);
     }
 }
