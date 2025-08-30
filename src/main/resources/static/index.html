@@ -1,0 +1,82 @@
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Static Site with Java Backend</title>
+    <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+<div class="header">
+    <h1>Welcome to the Java Static Site</h1>
+    <div>
+        <button onclick="getGreeting()">Get Greeting</button>
+        <button onclick="getUsers()">Fetch Users</button>
+    </div>
+</div>
+
+<div id="loader"></div>
+<p id="greeting"></p>
+
+<table id="userTable" style="display:none;">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Role</th>
+    </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<script>
+    function showLoader() {
+        document.getElementById('loader').style.display = 'block';
+    }
+
+    function hideLoader() {
+        document.getElementById('loader').style.display = 'none';
+    }
+
+    function getUsers() {
+        showLoader();
+        fetch('/users')
+            .then(response => response.json())
+            .then(data => {
+                const table = document.getElementById('userTable');
+                const tbody = table.querySelector('tbody');
+                tbody.innerHTML = '';
+
+                data.forEach(user => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${user.id}</td>
+                        <td>${user.name}</td>
+                        <td>${user.email}</td>
+                        <td>${user.role}</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+
+                table.style.display = 'table';
+                hideLoader();
+            })
+            .catch(err => {
+                console.error('Error fetching users:', err);
+                hideLoader();
+            });
+    }
+
+    function getGreeting() {
+        fetch('/api/greet')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('greeting').innerText = data;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+</script>
+</body>
+</html>
