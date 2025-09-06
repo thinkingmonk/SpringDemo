@@ -1,5 +1,8 @@
 package com.spring.demo;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public class OrderService {
 
     // Dependency Injection via constructor
